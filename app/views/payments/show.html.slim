@@ -1,0 +1,9 @@
+h1 = @payment.identifier
+
+- if @payment.multiple?
+  p This is a multipart payment
+  - @payment.parts.each do |part|
+    p = "#{part.invoice.identifier} | #{part.created_at.to_fs} | #{part.payment_method} | #{number_to_currency(part.amount, locale: :fr, unit: "€")}"
+
+- else
+  = link_to @payment.invoice.identifier, @payment.invoice

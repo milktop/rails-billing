@@ -1,0 +1,18 @@
+h1 class="text-xl" Sales
+
+= link_to 'New sale', new_sale_path, class: 'underline text-black'
+
+table
+  thead
+    tr
+      th Date
+      th Client
+      th Clinic
+      th Num products
+  tbody
+    - @sales.each do |sale|
+      tr
+        td = link_to sale.date.to_fs, sale
+        td = link_to sale.client.name, sale.client
+        td = link_to sale.clinic.name, sale.clinic
+        td = sale.line_items.count

@@ -1,0 +1,18 @@
+h1 class="text-xl" Consultations
+
+= link_to 'New consultation', new_consultation_path, class: 'underline text-black'
+
+table
+  thead
+    tr
+      th Date
+      th Client
+      th Clinic
+      th Motive
+  tbody
+    - @consultations.each do |consultation|
+      tr
+        td = link_to consultation.date.to_fs, consultation
+        td = link_to consultation.client.name, consultation.client
+        td = link_to consultation.clinic.name, consultation.clinic
+        td = consultation.motive.presence || "No motive"

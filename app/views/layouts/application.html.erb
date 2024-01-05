@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Billing</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= hotwire_livereload_tags if Rails.env.development? %>
+  </head>
+
+  <body>
+    <div class="container mx-auto">
+      <% flash.each do |type, message| %>
+        <%= message %>
+      <% end %>
+      <nav class="flex gap-4 mt-4 mb-6">
+        <%= link_to "Clients", clients_path %>
+        <%= link_to "Sales", sales_path %>
+        <%= link_to "Consultations", consultations_path %>
+        <%= link_to "Bills", bills_path %>
+        <%= link_to "Invoices", invoices_path %>
+        <%= link_to "Payments", payments_path %>
+        <%= link_to "Credit Notes", credit_notes_path %>
+      </nav>
+      <%= yield %>
+    </div>
+  </body>
+</html>

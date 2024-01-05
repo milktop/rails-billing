@@ -1,0 +1,17 @@
+- if line_items.empty?
+  p = "No items"
+- else
+  table
+    thead
+      tr
+        th Name
+        th Unit Price
+        th Quantity
+        th Total price
+    tbody
+      - line_items.each do |line_item|
+        tr
+          td = line_item.name
+          td = line_item.unit_price
+          td = line_item.quantity
+          td = line_item.gross_price

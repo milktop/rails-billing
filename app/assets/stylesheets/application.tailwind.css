@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  div.input {
+    @apply flex flex-col gap-1;
+  }
+
+  input {
+    @apply px-2 py-1 border border-gray-200;
+  }
+  
+  input[type="submit"] {
+    @apply mt-4 bg-gray-100 cursor-pointer;
+  }
+
+  table {
+    @apply w-full;
+  }
+  
+  th, td {
+    @apply text-left px-2 py-1 border border-gray-200;
+  }
+
+}

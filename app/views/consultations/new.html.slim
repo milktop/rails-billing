@@ -1,0 +1,10 @@
+h1 Add a new consultation
+
+= link_to "Return to consultations", consultations_path, class: "underline text-black"
+
+= simple_form_for @consultation do |form|
+  = form.input :date
+  = form.association :clinic
+  = form.association :client, collection: Client.order(:name)
+  = form.input :motive
+  = form.button :submit

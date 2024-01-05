@@ -1,0 +1,17 @@
+h1 = @credit_note.identifier
+
+- if @credit_note.invoice
+  p
+    | Linked invoice: 
+    = link_to @credit_note.invoice.identifier, @credit_note.invoice
+- else
+  p No linked invoice
+
+- if @credit_note.client_credit
+  p
+    | Linked client credit: 
+    = link_to @credit_note.client_credit.identifier, @credit_note.client_credit
+- else
+  p No linked client credit
+
+= render "line_items/table", line_items: @credit_note.line_items

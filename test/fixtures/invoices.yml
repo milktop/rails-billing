@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2023-12-21
+  due_date: 2023-12-21
+  client: one
+  clinic: one
+  net_price_cents: 1
+  gross_price_cents: 1
+  tax_amount_cents: 1
+  discount_amount_cents: 1
+
+two:
+  date: 2023-12-21
+  due_date: 2023-12-21
+  client: two
+  clinic: two
+  net_price_cents: 1
+  gross_price_cents: 1
+  tax_amount_cents: 1
+  discount_amount_cents: 1

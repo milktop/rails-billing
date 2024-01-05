@@ -1,0 +1,24 @@
+h1 class="font-bold text-lg mb-4" Bills
+
+table class="w-full"
+  thead
+    tr
+      th Date
+      th Resource
+      th Client
+      th Clinic
+      th Total
+      th Invoice
+  tbody
+    - @bills.each do |resource|
+      tr
+        td = link_to resource.date.to_fs, resource
+        td = link_to resource.identifier(with_prefix: false), resource
+        td = link_to resource.client.name, resource.client
+        td = link_to resource.clinic.name, resource.clinic
+        td = number_to_currency resource.item_total, unit: "€", locale: :fr
+        td
+          - if resource.billed?
+            = link_to "##{resource.invoice.id}", resource.invoice
+          - else
+            = button_to "Invoice", resource_invoice_path(resource)

@@ -1,0 +1,20 @@
+// A form for creating a single invoice payment
+
+- if !invoice || invoice.unpayable?
+  p class="text-red-500" = "This invoice cannot be paid."
+
+- else
+
+  = simple_form_for payment do |form|
+    
+    // Include the hidden fields
+    = form.input :invoice_id, as: :hidden, input_html: { value: invoice.id }
+    = form.input :client_id, as: :hidden, input_html: { value: invoice.client.id }
+
+    = form.input :payment_method, collection: Payment::payment_methods, include_blank: false
+
+    = form.input :amount, input_html: { type: "number", value: @invoice.balance, min: 0, max: @invoice.balance }, label: "Amount to pay"
+
+    = form.input :date
+
+    = form.submit "Pay invoice"

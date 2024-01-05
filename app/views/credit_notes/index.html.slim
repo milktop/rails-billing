@@ -1,0 +1,24 @@
+h1 Credit Notes
+
+table class="w-full"
+  thead
+    tr
+      th Date
+      th Client
+      th Invoice
+      th Credit
+  tbody
+    - @credit_notes.each do |resource|
+      tr
+        td = link_to resource.date.to_fs, resource
+        td = link_to resource.client.name, resource.client
+        td
+          - if resource.invoice 
+            = link_to resource.invoice.identifier, resource.invoice
+          - else
+            span = "-"
+        td
+          - if resource.redeemable?
+            = link_to "View", client_credit_path(resource.client_credit)
+          - else
+            span = "-"

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2024-01-03
+  clinic: one
+  client: one
+  invoice: one
+
+two:
+  date: 2024-01-03
+  clinic: two
+  client: two
+  invoice: two

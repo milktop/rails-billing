@@ -1,0 +1,16 @@
+= simple_form_for :line_item, url: line_items_path do |form|
+
+  div class="flex gap-2 items-end"
+    
+    = hidden_field_tag :resource_id, resource.id
+    = hidden_field_tag :resource_type, resource.class.name
+    
+    = form.hidden_field :type, value: type
+    = form.hidden_field :clinic_id, value: resource.clinic_id
+    = form.hidden_field :client_id, value: resource.client_id
+      
+    = form.input :name
+    = form.input :unit_price
+    = form.input :quantity, input_html: { value: 1 }
+  
+    = form.submit "Add item"

@@ -1,0 +1,17 @@
+h1 = @client_credit.identifier
+
+p = link_to "Return to client credits", client_credits_path, class: "underline text-black mb-4"
+
+p = "Date: #{@client_credit.date.to_fs}"
+p
+  | Client: 
+  = link_to @client_credit.client.name, @client_credit.client
+p
+  | Credit note: 
+  - if @client_credit.credit_note
+    = link_to "View", @client_credit.credit_note
+  - else
+    span = "-"
+p = "Amount: #{number_to_currency @client_credit.amount, unit: "€", locale: :fr}"
+p = "Redeemed: #{number_to_currency @client_credit.amount_spent, unit: "€", locale: :fr}"
+p = "Remaining: #{number_to_currency @client_credit.amount_remaining, unit: "€", locale: :fr}"

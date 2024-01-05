@@ -1,0 +1,11 @@
+h1 = "Payment for Invoice #{@invoice.short_reference}"
+
+= @payment.errors.full_messages.to_sentence if @payment.errors.any?
+
+= @payment.errors.inspect
+
+= simple_form_for @payment, url: invoice_payments_path do |form|
+  = form.input :payment_method, collection: payment_options, include_blank: false
+  = form.input :date
+  = form.input :amount, input_html: { type: "number", value: @invoice.balance, min: 0, max: @invoice.balance }, label: "Amount to pay"
+  = form.submit "Pay invoice"

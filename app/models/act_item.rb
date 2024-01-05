@@ -1,0 +1,3 @@
+class ActItem < LineItem
+  
+end

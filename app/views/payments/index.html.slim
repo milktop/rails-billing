@@ -1,0 +1,20 @@
+h1 class="font-bold text-2xl mb-6" Payments
+
+table class="w-full"
+  thead
+    tr
+      th Date
+      th Client
+      th Invoice(s)
+      th Amount
+      th Method
+  tbody
+    - @payments.each do |payment|
+      tr
+        td = link_to payment.id, payment
+        td = link_to payment.client.name, payment.client
+        td
+          - payment.invoices.each do |invoice|
+            = link_to invoice.short_reference, invoice
+        td = number_to_currency payment.amount, locale: :fr, unit: "€"
+        td = payment.translated_payment_method

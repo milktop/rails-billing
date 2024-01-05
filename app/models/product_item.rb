@@ -1,0 +1,3 @@
+class ProductItem < LineItem
+  
+end

@@ -1,0 +1,16 @@
+h1 = @client.name
+
+= link_to "Return to Clients", clients_path, class: "underline text-black"
+
+- if @client.unbilled_resources.any?
+  h4 Bons à facturer
+  p = "Ce client a #{pluralize(@client.unbilled_resources.count, "resource")} non facturée"
+  ul
+    - @client.unbilled_resources.each do |resource|
+      li = link_to resource.identifier, resource
+
+- if @client.invoices.any?
+  h4 Factures
+  ul
+    - @client.invoices.each do |invoice|
+      li = link_to invoice.identifier, invoice

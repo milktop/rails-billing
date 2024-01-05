@@ -1,0 +1,11 @@
+en:
+  hello: "Hello world"
+  activerecord:
+    attributes:
+      payment:
+        payment_method_list:
+          credit_card: "Credit Card"
+          cash: "Cash"
+          cheque: "Cheque"
+          transfer: "Bank Transfer"
+          client_credit: "Client credit"

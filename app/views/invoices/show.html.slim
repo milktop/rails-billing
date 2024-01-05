@@ -1,0 +1,35 @@
+div class="flex flex-col gap-4"
+
+  h1 class="font-bold text-2xl" = "Invoice ##{@invoice.id}"
+  h6 class="underline" = link_to @invoice.resource.identifier(with_prefix: false), @invoice.resource
+
+  = link_to "Return to Invoices", invoices_path, class: "underline text-black"
+
+  - if @invoice.credit_note
+    = link_to @invoice.credit_note.identifier, @invoice.credit_note, class: "underline text-black"
+  - else
+    = button_to "Issue credit", credit_notes_path(invoice_id: @invoice.id), method: :post, class: "underline text-black", data: { turbo_confirm: "Are you sure?" }
+
+  = link_to "Client: #{@invoice.client.name}", @invoice.client
+
+  div class="flex flex-col gap-4"
+  
+    - if @invoice.line_items.where(type: "ActItem").any?
+      h4 Acts
+      = render "line_items/table", line_items: @invoice.line_items.where(type: "ActItem")
+
+    - if @invoice.line_items.where(type: "ProductItem").any?
+      h4 Products
+      = render "line_items/table", line_items: @invoice.line_items.where(type: "ProductItem")
+  
+    h6 = "Total: #{number_to_currency @invoice.total}"
+    
+    h6 class="bg-yellow-200" = "Status: #{@invoice.status}"
+
+  - unless @invoice.paid?    
+    = link_to "Pay invoice", new_invoice_payment_path(@invoice), class: "underline text-black"
+  
+  - if @invoice.parts.any?
+    h5 Payments
+    - @invoice.parts.each do |part|
+      = link_to "#{part.created_at.to_fs} | #{part.payment.payment_method} | #{number_to_currency(part.amount, locale: :fr, unit: "€")}", part.payment

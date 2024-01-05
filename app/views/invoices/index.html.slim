@@ -1,0 +1,23 @@
+div class="flex flex-col gap-4"
+
+  h1 class="font-bold text-2xl" Invoices
+
+  table
+    thead
+      th ID
+      th Date
+      th Client
+      th Clinic 
+      th Resource
+      th Total
+      th Status
+    tbody
+      - @invoices.each do |invoice|
+        tr
+          td = link_to invoice.id, invoice, class: "hover:underline text-black"
+          td = link_to invoice.date.to_fs, invoice, class: "hover:underline text-black"
+          td = link_to invoice.client.name, invoice.client, class: "hover:underline text-black"
+          td = invoice.clinic.name
+          td = link_to invoice.resource.identifier, invoice.resource, class: "hover:underline text-black"
+          td = invoice.gross_price
+          td = invoice.status
