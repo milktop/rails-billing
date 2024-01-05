@@ -6,4 +6,4 @@ Exploring the relationship between `line_item`, `invoice`, `payment`, `credit_no
 
 Any styling or visual choices are incidental.
 
-`clinic`, and `consultation` are present simply as they form part of the business logic that this code was initially extracted from.
+`clinic`, `consultation`, `act`, `act_item` and other models are present simply as they form part of the business logic that this code was initially extracted from.
