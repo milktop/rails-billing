@@ -1,24 +1,9 @@
-# README
+# Rails billing
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+An attempt to isolate the various models, concerns and general logic for basic billing functionality in Rails. This does **not** cover integrations with online APIs eg Stripe.
 
-Things you may want to cover:
+Exploring the relationship between `line_item`, `invoice`, `payment`, `credit_note` and others. The general idea is that different models can become resources that have line_items, this is to avoid the need for an intermediary `bill` model.
 
-* Ruby version
+Any styling or visual choices are incidental.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+`clinic`, and `consultation` are present simply as they form part of the business logic that this code was initially extracted from.
