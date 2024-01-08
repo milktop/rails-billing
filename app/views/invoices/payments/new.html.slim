@@ -1,11 +1,22 @@
-h1 = "Payment for Invoice #{@invoice.short_reference}"
+h1 class="font-bold text-2xl mb-6" = "Payment for Invoice #{@invoice.short_reference}"
 
-= @payment.errors.full_messages.to_sentence if @payment.errors.any?
+= render "shared/base-errors", resource: @payment
 
-= @payment.errors.inspect
+= simple_form_for @payment, url: invoice_payments_path, data: { controller: "payment-form" } do |form|
+  
+  = form.input :payment_method, collection: payment_options(client: @invoice.client), include_blank: false, input_html: { data: { action: "payment-form#onMethodChange" }}
 
-= simple_form_for @payment, url: invoice_payments_path do |form|
-  = form.input :payment_method, collection: payment_options, include_blank: false
+  - if @invoice.client.available_credits.any?
+    = form.input :client_credit_id, include_blank: false, label: "Credit to use",\
+      collection: @invoice.client.available_credits.map { |credit| ["#{credit.identifier} (#{number_to_currency(credit.amount_remaining, locale: :fr, unit: "€")})", credit.id] },\
+      wrapper_html: { class: "hidden", data: { payment_form_target: "creditSelectField" } }
+  
   = form.input :date
-  = form.input :amount, input_html: { type: "number", value: @invoice.balance, min: 0, max: @invoice.balance }, label: "Amount to pay"
+  
+  = form.input :amount, label: "Amount to pay", input_html: { type: "number", value: @invoice.balance, min: 0, max: @invoice.balance, data: { payment_form_target: "amountInput" } }  
+  p class="text-xs text-gray-500 hidden" data-payment-form-target="amountHelpText"
+  
   = form.submit "Pay invoice"
+
+div class="mt-4"
+  = link_to "Return to invoice", @invoice, class: "underline text-black"

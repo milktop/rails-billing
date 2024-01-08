@@ -18,6 +18,10 @@ class Invoice < ApplicationRecord
   alias_attribute :parts, :payment_allocations
   alias_attribute :total, :gross_price
   
+  def resources
+    line_items.map(&:resource).uniq
+  end
+  
   def resource
     # A resource's line_items will always have the same invoice (if it exists)
     line_items.first&.resource
@@ -65,8 +69,8 @@ class Invoice < ApplicationRecord
     return "Active"
   end
 
-  def set_totals! save: true, resource: nil
-    line_items = resource ? resource.line_items : self.line_items
+  def set_totals! save: true, resources: nil
+    line_items = resources ? resources.map(&:line_items).flatten : self.line_items
     self.net_price_cents = line_items.map(&:net_price_cents).sum
     self.gross_price_cents = line_items.map(&:gross_price_cents).sum
     self.tax_amount_cents = line_items.map(&:tax_amount_cents).sum
@@ -78,6 +82,7 @@ class Invoice < ApplicationRecord
     raise ArgumentError, "Resource must be a model" unless resource.is_a?(ApplicationRecord)
     raise StandardError, "Resource is not of a billable type" unless resource.respond_to? :billable?
     raise StandardError, "Resource is already billed" if resource.billed?
+    raise StandardError, "Resource is not billable" unless resource.billable?
     
     ActiveRecord::Base.transaction do
       
@@ -90,7 +95,7 @@ class Invoice < ApplicationRecord
       invoice.date = Date.today
       invoice.due_date = Date.today + 30.days
 
-      invoice.set_totals! save: false, resource: resource
+      invoice.set_totals! save: false, resources: [resource]
       
       # Save the invoice
       invoice.save!
@@ -105,17 +110,38 @@ class Invoice < ApplicationRecord
     
   end
 
-  def settle payment:, amount: nil
-    raise ArgumentError, "Payment is required" if payment.nil?
+  def self.create_from_resources(resources = [])
     
-    amount ||= balance
-    
-    if amount.to_f > balance.to_f
-      raise ArgumentError, "Payment amount cannot exceed invoice balance"
+    raise ArgumentError, "Resources must be an array" unless resources.is_a?(Array)
+  
+    grouped_resources = resources.group_by { |resource| [resource.clinic_id, resource.client_id] }
+  
+    invoice_ids = [] # Array to store created invoice IDs
+  
+    ActiveRecord::Base.transaction do
+      grouped_resources.each do |(clinic_id, client_id), resources|
+        # Create the invoice
+        invoice = Invoice.new(clinic_id: clinic_id, client_id: client_id, 
+                              date: Date.today, due_date: Date.today + 30.days)
+  
+        invoice.set_totals!(save: false, resources: resources)
+        
+        # Save the invoice
+        invoice.save!
+  
+        # Collect the invoice ID
+        invoice_ids << invoice.id
+  
+        # Set the line items to use this invoice
+        resources.each do |resource|
+          resource.line_items.unbilled.update_all(invoice_id: invoice.id)
+        end
+      end
     end
-
-    payment_allocations.create payment: payment, amount: amount.to_f
+  
+    invoice_ids # Return the collected invoice IDs
   end
+  
 
   def issue_credit_note!
     ActiveRecord::Base.transaction do

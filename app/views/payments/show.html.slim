@@ -1,4 +1,4 @@
-h1 = @payment.identifier
+h1 class="font-bold text-2xl mb-6" = @payment.identifier
 
 - if @payment.multiple?
   p This is a multipart payment
@@ -6,4 +6,14 @@ h1 = @payment.identifier
     p = "#{part.invoice.identifier} | #{part.created_at.to_fs} | #{part.payment_method} | #{number_to_currency(part.amount, locale: :fr, unit: "€")}"
 
 - else
-  = link_to @payment.invoice.identifier, @payment.invoice
+  p
+    | Invoice: 
+    = link_to @payment.invoice.identifier, @payment.invoice
+  
+  p = "Amount: #{number_to_currency @payment.amount, locale: :fr, unit: "€"}"
+  - if @payment.client_credit
+    p
+      | Method: 
+      = link_to @payment.client_credit.identifier, @payment.client_credit
+  - else
+    p = "Method: #{@payment.translated_payment_method}"

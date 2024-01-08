@@ -1,0 +1,4 @@
+- resource ||= nil
+
+- if resource && resource.errors[:base].any?
+  p class="text-red-500 mb-4" = resource.errors[:base].to_sentence

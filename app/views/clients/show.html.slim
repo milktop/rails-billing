@@ -1,16 +1,35 @@
-h1 = @client.name
+h1 class="font-bold text-2xl mb-6" = @client.name
 
-= link_to "Return to Clients", clients_path, class: "underline text-black"
+div class="flex flex-col gap-4"
 
-- if @client.unbilled_resources.any?
-  h4 Bons à facturer
-  p = "Ce client a #{pluralize(@client.unbilled_resources.count, "resource")} non facturée"
-  ul
-    - @client.unbilled_resources.each do |resource|
-      li = link_to resource.identifier, resource
+  = link_to "Return to Clients", clients_path, class: "underline text-black"
 
-- if @client.invoices.any?
-  h4 Factures
-  ul
-    - @client.invoices.each do |invoice|
-      li = link_to invoice.identifier, invoice
+  - if @client.unbilled_resources.any?
+    h4 Bons à facturer
+    p = "This client has #{pluralize(@client.unbilled_resources.count, "bill")} \
+      totalling #{euros(@client.unbilled_amount)} ready to be invoiced"
+    = button_to "Invoice now", invoices_path(resources: @client.unbilled_references),\
+      class: "underline text-black",\
+      data: { turbo_confirm: "Invoice unbilled resources?" }
+    ul
+      - @client.unbilled_resources.each do |resource|
+        li 
+          = link_to resource.identifier, resource
+          = button_to "Invoice now", resource_invoice_path(resource), class: "underline text-black", data: { turbo_confirm: "Are you sure you would like to invoice this #{resource.class.name.titleize}?" }
+
+  - if @client.invoices.any?
+    h4 Factures
+    ul
+      - @client.invoices.each do |invoice|
+        li = link_to invoice.identifier, invoice
+
+  - if @client.payments.any?
+    h4 Recent payments
+    ul
+      - @client.payments.order(created_at: :desc).limit(5).each do |payment|
+        li = link_to "#{payment.created_at.to_fs} | #{number_to_currency(payment.amount, locale: :fr, unit: "€")}", payment
+  
+  - if @client.available_credits.any?
+    div
+      h4 Client has credits available
+      p = "Total credit: #{number_to_currency(@client.total_credit, locale: :fr, unit: "€")}"

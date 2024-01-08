@@ -1,8 +1,12 @@
 class BillsController < ApplicationController
+  
   def index
-    @consultations = Consultation.all.select(&:billable?)
-    @sales = Sale.all.select(&:billable?)
+    scope = params[:all] ? :billable : :to_be_billed
+    @consultations = Consultation.send(scope)
+    @sales = Sale.send(scope)
     @bills = @consultations + @sales
     @bills.sort_by!(&:date).reverse!
+    @title = params[:all] ? 'All Bills' : 'To Be Billed'
   end
+
 end

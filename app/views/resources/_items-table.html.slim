@@ -1,0 +1,12 @@
+- hide_title ||= false
+
+- unless hide_title
+  = link_to resource.identifier, resource, class: "italic text-sm text-gray-600"
+    
+- if resource.line_items.where(type: "ActItem").any?
+  h4 Acts
+  = render "line_items/table", line_items: resource.line_items.where(type: "ActItem")
+
+- if resource.line_items.where(type: "ProductItem").any?
+  h4 Products
+  = render "line_items/table", line_items: resource.line_items.where(type: "ProductItem")

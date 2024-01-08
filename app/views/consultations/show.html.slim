@@ -1,6 +1,6 @@
 div class="flex flex-col gap-4"
 
-  h1 class="font-bold text-2xl" = "Consultation ##{@consultation.id}"
+  h1 class="font-bold text-2xl" = @consultation.identifier
 
   = link_to "Return to consultations", consultations_path, class: "underline text-black"
 
@@ -12,15 +12,16 @@ div class="flex flex-col gap-4"
   - if @consultation.invoice
     = link_to "Invoice ##{@consultation.invoice.id}", @consultation.invoice, class: "underline text-black"
   - else
-    - if @consultation.billable?
-      = button_to "Invoice items", resource_invoice_path(@consultation), class: "underline text-black", data: { turbo_confirm: "Invoice this consultation?" }
+    - if @consultation.to_be_billed?
+      = button_to "Invoice items", invoices_path(resources: [@consultation.record_reference]),\
+        class: "underline text-black", data: { turbo_confirm: "Invoice this consultation?" }
     - else
       p = "This consultation is not billable"
   
-  h4 Acts
+  h4 Add an act
   = render "line_items/form", resource: @consultation, type: "ActItem"
-  = render "line_items/table", line_items: @consultation.line_items.where(type: "ActItem")
-  
-  h4 Produits
+
+  h4 Add a product
   = render "line_items/form", resource: @consultation, type: "ProductItem"
-  = render "line_items/table", line_items: @consultation.line_items.where(type: "ProductItem")
+  
+  = render "resources/items-table", resource: @consultation, hide_title: true

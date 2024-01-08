@@ -34,7 +34,7 @@ class ClientCredit < ApplicationRecord
   end
 
   def active?
-    !expired?
+    !expired? && unspent?
   end
   
 end

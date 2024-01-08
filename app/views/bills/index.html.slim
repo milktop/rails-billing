@@ -1,4 +1,9 @@
-h1 class="font-bold text-lg mb-4" Bills
+h1 class="font-bold text-lg mb-4" = @title
+
+- if params[:all]
+  p class="mb-4" = link_to "Show only unbilled items", bills_path, class: "text-sm underline"
+- else
+  p class="mb-4" = link_to "Show all bills", bills_path(all: true), class: "text-sm underline"
 
 table class="w-full"
   thead
@@ -21,4 +26,4 @@ table class="w-full"
           - if resource.billed?
             = link_to "##{resource.invoice.id}", resource.invoice
           - else
-            = button_to "Invoice", resource_invoice_path(resource)
+            = button_to "Invoice", resource_invoice_path(resource), class: "bg-gray-100 px-2 border border-gray-200", data: { turbo_confirm: "Invoice this item?" }

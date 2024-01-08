@@ -22,4 +22,5 @@ div class="flex flex-col gap-4"
   h4 Produits
 
   = render "line_items/form", resource: @sale, type: "ProductItem"
-  = render "line_items/table", line_items: @sale.line_items
+  
+  = render "resources/items-table", resource: @sale, hide_title: true

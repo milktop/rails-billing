@@ -10,15 +10,18 @@ module Billable
 
     unless respond_to?(:invoice)
       def invoice
-        return nil unless billed?
-        line_items.billed.first.invoice
+        line_items.where.not(invoice_id: nil).first&.invoice
       end
     end
+
+    # scope billable where any line item is billable
+    scope :billable, -> { where(id: LineItem.billable.select(:resource_id)) }
+    scope :to_be_billed, -> { where(id: LineItem.to_be_billed.select(:resource_id)) }
     
   end
 
   def billed?
-    billable? && line_items.billed.count == line_items.count
+    invoice.present?
   end
   
   def unbilled?
@@ -26,8 +29,11 @@ module Billable
   end
   
   def billable?
-    # unbilled? && line_items.any?
-    line_items.any?
+    line_items.billable.any?
+  end
+
+  def to_be_billed?
+    line_items.to_be_billed.any?
   end
 
   def item_total_cents

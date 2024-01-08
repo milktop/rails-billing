@@ -1,5 +1,6 @@
 class Payment < ApplicationRecord
   belongs_to :client
+  belongs_to :client_credit
 
   has_many :payment_allocations
   has_many :invoices, through: :payment_allocations

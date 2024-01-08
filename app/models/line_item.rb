@@ -19,7 +19,9 @@ class LineItem < ApplicationRecord
 
   scope :billed, -> { where.not(invoice_id: nil) }
   scope :unbilled, -> { where(invoice_id: nil) }
-
+  scope :billable, -> { where.not(resource_type: 'CreditNote') }
+  scope :to_be_billed, -> { billable.unbilled }
+  
   def discount_amount_cents
     return 0 unless unit_price_cents && quantity && discount_rate
     (unit_price_cents * quantity * discount_rate / 100.0).round
