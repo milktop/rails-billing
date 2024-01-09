@@ -7,3 +7,13 @@ Exploring the relationship between `line_item`, `invoice`, `payment`, `credit_no
 Any styling or visual choices are incidental.
 
 `clinic`, `consultation`, `act`, `act_item` and other models are present simply as they form part of the business logic that this code was initially extracted from.
+
+### Todo
+- [ ] Generate line_items attached to various resources
+- [ ] Invoice one or many resource's line items, grouped by client (and clinic in our version)
+- [ ] Allow part payment of a single invoice
+- [ ] Pay one or multiple invoices with a single payment
+- [ ] Apply a credit note to an invoice which "cancels" it, potentially creating a client_credit if already paid/part paid
+- [ ] Allowing a client_credit to be used as a payment method if any remaining
+- [ ] Mark an invoice as an error (create a credit note with reason)
+- [ ] Make a quote
